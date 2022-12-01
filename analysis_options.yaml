@@ -1,0 +1,11 @@
+include: package:flutter_lints/flutter.yaml
+
+# Additional information about this file can be found at
+# https://dart.dev/guides/language/analysis-options
+
+linter:
+  rules:
+    prefer_relative_imports: true # preferência para importação de arquivos(.dart) do projeto será relativa 
+    # always_use_package_imports: true # importar pela raíz da package do projeto
+    # camel_case_types: true
+    
