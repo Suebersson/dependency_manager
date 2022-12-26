@@ -59,7 +59,7 @@ class Controller extends Disposeble {
 
   @override
   void dispose() {
-    print('---- dispose Controller ----');
+    //print('---- dispose Controller ----');
   }
   
 }

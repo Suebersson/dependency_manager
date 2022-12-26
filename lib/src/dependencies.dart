@@ -3,7 +3,8 @@ import 'package:dart_dev_utils/dart_dev_utils.dart' show printLog, Disposeble;
 
 part './dependency_constructor.dart';
 part './dependency_state.dart';
-part 'dependency_dispose.dart';
+part './dependency_dispose.dart';
+part './dependency_manager_error.dart';
 
 /// Classe responsável por prover as função para o controle e acesso
 /// as instâncias de dependências
@@ -47,7 +48,8 @@ abstract class Dependencies<O> {
         return _dependency.instance = _dependency.closure.call();
       }
     } else {
-      throw 'Objeto $O não encontrado na lista de dependências';
+      throw DependencyManagerError(
+          'Objeto $O não encontrado na lista de dependências');
     }
   }
 

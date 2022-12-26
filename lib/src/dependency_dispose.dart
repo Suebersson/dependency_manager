@@ -19,16 +19,19 @@ void dependencyDispose(dynamic o) {
     // não faça nada
   } else if (o is Sink) {
     o.close();
-    printLog('Objeto ${o.runtimeType} disposado', name: 'Dependencies');
+    printLog('Objeto ${o.runtimeType} disposado', name: 'dependencyDispose');
   } else if (o is Disposeble || o is ChangeNotifier) {
     o.dispose();
-    printLog('Objeto ${o.runtimeType} disposado', name: 'Dependencies');
+    printLog('Objeto ${o.runtimeType} disposado', name: 'dependencyDispose');
   } else {
     // Tentar chamar o método dispose caso ele exista
     try {
       o.dispose();
     } catch (e) {
-      // O método dispose não existe nesse objeto
+      // printLog(
+      //   'O método dispose não existe no objeto ${o.runtimeType}',
+      //   name: 'dependencyDispose'
+      // );
     }
   }
 }
