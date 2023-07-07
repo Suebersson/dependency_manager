@@ -38,10 +38,9 @@ abstract class Dependencies<O> {
       _dependency = _dependencies.singleWhere((e) => e.key == O);
 
       if (_dependency.isSingleton) {
-        if (!_dependency.isLazy) {
-          return _dependency.instance;
+        if (_dependency.isLazy) {
+          return _dependency.instance ??= _dependency.closure.call();
         } else {
-          _dependency.instance ??= _dependency.closure.call();
           return _dependency.instance;
         }
       } else {

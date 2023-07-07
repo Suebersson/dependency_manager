@@ -1,6 +1,6 @@
 name: dependency_manager
 description: Package desenvolvido para prover funções para o controle e gerenciamento de instâncias de dependências em app.
-version: 1.0.1
+version: 1.0.2
 homepage: https://github.com/Suebersson/dependency_manager.git
 repository: https://github.com/Suebersson/dependency_manager
 
@@ -13,14 +13,14 @@ repository: https://github.com/Suebersson/dependency_manager
 # git push -u origin main
 
 environment:
-  sdk: ">=2.16.1 <3.0.0"
+  sdk: ">=2.16.1 <4.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  dart_dev_utils: ^1.1.0
+  dart_dev_utils: ^1.1.4
 
 dev_dependencies:
   flutter_test:
