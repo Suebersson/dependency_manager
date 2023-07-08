@@ -74,6 +74,37 @@ abstract class Dependencies<O> {
     }
   }
 
+  /// Substituir uma instância singleton
+  ///
+  /// Essa função se aplica em situações bem especificas quando é
+  /// necessário recriar uma instância de um objeto importante.
+  ///
+  /// Ex: Recriar uma instância de [UserData] ou [AppConfigData] que são
+  /// carregadas antes da inicialização da app e que os valores foram alterados
+  /// pelo usuário na app
+  static bool replaceInstanceSingleton<O>(O Function() closure) {
+    assert(O != dynamic,
+        'Insira o tipo da dependência ou objeto no parâmentro genérico O');
+
+    if (contains<O>()) {
+      
+      remove<O>();
+
+      _dependency = Dependency<O>(closure, isLazy: false, isSingleton: true);
+
+      _dependency.instance = _dependency.closure.call();
+
+      _dependencies.add(_dependency);
+
+      return true;
+    } else {
+      printLog('A instância de $O não foi encontrada nas dependências',
+          name: 'Dependencies');
+
+      return false;
+    }
+  }
+
   /// Remover um objeto [Object], e disposar o mesmo se for disposavel
   static void remove<O>() {
     assert(O != dynamic,

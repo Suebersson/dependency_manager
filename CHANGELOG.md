@@ -3,3 +3,5 @@
 ## 1.0.1 Implementação do objeto DependencyManagerError
 
 ## 1.0.2 Ajuste no método Dependencies.get
+
+## 1.0.3 Implementação da função [Dependencies.replaceInstanceSingleton]
