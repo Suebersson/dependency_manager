@@ -5,3 +5,5 @@
 ## 1.0.2 Ajuste no método Dependencies.get
 
 ## 1.0.3 Implementação da função [Dependencies.replaceInstanceSingleton]
+
+## 1.0.4 Implementação de tratamento erro[NoSuchMethodError] na função [dependencyDispose] 

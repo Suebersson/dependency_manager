@@ -87,7 +87,6 @@ abstract class Dependencies<O> {
         'Insira o tipo da dependência ou objeto no parâmentro genérico O');
 
     if (contains<O>()) {
-      
       remove<O>();
 
       _dependency = Dependency<O>(closure, isLazy: false, isSingleton: true);

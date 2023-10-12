@@ -1,3 +1,5 @@
+// ignore_for_file: unused_catch_stack
+
 part of './dependencies.dart';
 
 // Para que essa função possa ser visível e usada/reaproveitada em todo package
@@ -27,7 +29,12 @@ void dependencyDispose(dynamic o) {
     // Tentar chamar o método dispose caso ele exista
     try {
       o.dispose();
-    } catch (e) {
+    } on NoSuchMethodError catch (e, s) {
+      // printLog(
+      //   'O método dispose não existe no objeto ${o.runtimeType}',
+      //   name: 'dependencyDispose'
+      // );
+    } catch (e, s) {
       // printLog(
       //   'O método dispose não existe no objeto ${o.runtimeType}',
       //   name: 'dependencyDispose'
