@@ -1,11 +1,14 @@
 part of './dependencies.dart';
 
-/// Acoplar uma instância de um [Object]
+/// Função que retorná uma instância de um objeto
+typedef Closure<O> = O Function();
+
+/// Adicionar uma instância de um [Object]
 class Dependency<O> {
   late final Type key;
-  final bool isLazy;
-  final bool isSingleton;
-  final O Function() closure;
+  final bool isLazy, isSingleton;
+  final Closure<O> closure;
+
   O? instance;
 
   /// Criar uma instância de um objeto [singleton = false & lazy = true]
@@ -15,12 +18,12 @@ class Dependency<O> {
         key = O;
 
   /// Criar uma instância de um objeto [singleton = true & lazy = true]
-  factory Dependency.lazySingleton(O Function() closure) {
+  factory Dependency.lazySingleton(Closure<O> closure) {
     return Dependency<O>(closure, isSingleton: true);
   }
 
   /// Criar uma instância de um objeto [singleton = true & lazy = false]
-  factory Dependency.singleton(O Function() closure) {
+  factory Dependency.singleton(Closure<O> closure) {
     return Dependency<O>(closure, isSingleton: true, isLazy: false);
   }
 }

@@ -1,5 +1,3 @@
-// ignore_for_file: unused_catch_stack
-
 part of './dependencies.dart';
 
 // Para que essa função possa ser visível e usada/reaproveitada em todo package
@@ -13,32 +11,17 @@ part of './dependencies.dart';
 // [Dependencies], [routeManger], ...
 
 /// Verificar o tipo de objeto e disposar se necessário
-void dependencyDispose(dynamic o) {
+void dependencyDispose<O>(O o) {
   // Gerar uma throw e para a execução caso o objeto recebido é nulo
   //ArgumentError.checkNotNull(o, 'O objeto recebido é nulo');
 
-  if (o == null) {
-    // não faça nada
-  } else if (o is Sink) {
+  if (o is Sink) {
     o.close();
-    printLog('Objeto ${o.runtimeType} disposado', name: 'dependencyDispose');
-  } else if (o is Disposeble || o is ChangeNotifier) {
+    Dependencies._printLog('Objeto ${o.runtimeType} disposado',
+        name: 'dependencyDispose');
+  } else if (o is Disposeble) {
     o.dispose();
-    printLog('Objeto ${o.runtimeType} disposado', name: 'dependencyDispose');
-  } else {
-    // Tentar chamar o método dispose caso ele exista
-    try {
-      o.dispose();
-    } on NoSuchMethodError catch (e, s) {
-      // printLog(
-      //   'O método dispose não existe no objeto ${o.runtimeType}',
-      //   name: 'dependencyDispose'
-      // );
-    } catch (e, s) {
-      // printLog(
-      //   'O método dispose não existe no objeto ${o.runtimeType}',
-      //   name: 'dependencyDispose'
-      // );
-    }
+    Dependencies._printLog('Objeto ${o.runtimeType} disposado',
+        name: 'dependencyDispose');
   }
 }

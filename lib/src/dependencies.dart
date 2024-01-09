@@ -1,10 +1,10 @@
-import 'package:flutter/widgets.dart';
-import 'package:dart_dev_utils/dart_dev_utils.dart' show printLog, Disposeble;
+import 'package:dart_dev_utils/dart_dev_utils.dart' show printLog;
 
 part './dependency_constructor.dart';
-part './dependency_state.dart';
 part './dependency_dispose.dart';
-part './dependency_manager_error.dart';
+part './exception.dart';
+part './extension.dart';
+part './disposeble.dart';
 
 /// Classe responsável por prover as função para o controle e acesso
 /// as instâncias de dependências
@@ -13,7 +13,7 @@ abstract class Dependencies<O> {
   static final List<Dependency> _dependencies = <Dependency>[];
 
   /// Definir e criar instâncias através de uma lista de [Dependency]
-  /// com [closure]
+  /// com [Closure]
   static Future<void> set(List<Dependency> dependencyList) async {
     await Future.forEach<Dependency>(dependencyList, (o) {
       if (!_dependencies.any((e) => e.key == o.key)) {
@@ -22,8 +22,7 @@ abstract class Dependencies<O> {
         }
         _dependencies.add(o);
       } else {
-        printLog('Objeto ${o.key} já existe na lista de dependências',
-            name: 'Dependencies');
+        _printLog('Objeto ${o.key} já existe na lista de dependências');
       }
     });
     dependencyList.clear();
@@ -53,7 +52,7 @@ abstract class Dependencies<O> {
   }
 
   /// Adicionar e instânciar um objeto na lista de dependências
-  static O add<O>(O Function() closure, {isSingleton = true}) {
+  static O add<O>(Closure<O> closure, {isSingleton = true}) {
     assert(O != dynamic,
         'Insira o tipo da dependência ou objeto no parâmentro genérico O');
 
@@ -67,8 +66,7 @@ abstract class Dependencies<O> {
 
       return _dependency.instance;
     } else {
-      printLog('Já existe uma instância desse objeto $O nas dependências',
-          name: 'Dependencies');
+      _printLog('Já existe uma instância desse objeto $O nas dependências');
 
       return get<O>();
     }
@@ -82,7 +80,7 @@ abstract class Dependencies<O> {
   /// Ex: Recriar uma instância de [UserData] ou [AppConfigData] que são
   /// carregadas antes da inicialização da app e que os valores foram alterados
   /// pelo usuário na app
-  static bool replaceInstanceSingleton<O>(O Function() closure) {
+  static bool replaceInstanceSingleton<O>(Closure<O> closure) {
     assert(O != dynamic,
         'Insira o tipo da dependência ou objeto no parâmentro genérico O');
 
@@ -97,14 +95,13 @@ abstract class Dependencies<O> {
 
       return true;
     } else {
-      printLog('A instância de $O não foi encontrada nas dependências',
-          name: 'Dependencies');
+      _printLog('A instância de $O não foi encontrada nas dependências');
 
       return false;
     }
   }
 
-  /// Remover um objeto [Object], e disposar o mesmo se for disposavel
+  /// Remover um objeto e disposar o mesmo se for disposavel[Disposeble]
   static void remove<O>() {
     assert(O != dynamic,
         'Insira o tipo da dependência ou objeto no parâmentro genérico O');
@@ -118,23 +115,21 @@ abstract class Dependencies<O> {
           return false;
         }
       });
-      printLog('Objeto $O removido com sucesso', name: 'Dependencies');
+      _printLog('Objeto $O removido com sucesso');
     } else {
-      printLog('Objeto $O não encontrado na lista de dependências',
-          name: 'Dependencies');
+      _printLog('Objeto $O não encontrado na lista de dependências');
     }
   }
 
   /// Remover todos os objetos, e disposar os mesmos se for
-  /// disposavel na lista dependências
+  /// disposavel[Disposeble] na lista dependências
   static Future<void> removeAll() async {
     if (_dependencies.isNotEmpty) {
       await Future.forEach<Dependency>(_dependencies, (o) {
         dependencyDispose(o.instance);
       });
       _dependencies.clear();
-      printLog('Todas as instâncias foram removidas com sucesso',
-          name: 'Dependencies');
+      _printLog('Todas as instâncias foram removidas com sucesso');
     }
   }
 
@@ -159,47 +154,11 @@ abstract class Dependencies<O> {
         'Insira o tipo da dependência ou objeto no parâmentro genérico O');
     return _dependencies.any((e) => e.key == O);
   }
-}
 
-/// Criar uma instância única de [Dependencies] e adicionar as funções
-/// dentro dos objetos [StatelessWidget] e [State] através de uma [extension]
-final Dependencies _dependencies = _Dependencies();
-
-class _Dependencies extends Dependencies {}
-
-extension ImplementDependenciesStl on StatelessWidget {
-  Dependencies get dependencies => _dependencies;
-}
-
-extension ImplementDependenciesStf on State {
-  Dependencies get dependencies => _dependencies;
-}
-
-/// Implementar funções não estaticas dentro da classe [Dependencies]
-/// que poderam ser acessadas quando a mesma for herdada ou mixada
-///
-/// Essa funções também serão implementas dentro das classes
-/// [StatelessWidget] & [State] através de uma propriedade get
-/// de nome [dependencies]
-extension ImplementNotStatics on Dependencies {
-  /// Obter a instância de um objeto passando o tipo Genérico [O]
-  O get<O>() => Dependencies.get<O>();
-
-  /// Adicionar e instânciar um objeto na lista de dependências
-  O add<O>(O Function() closure, {isSingleton = true}) {
-    return Dependencies.add(closure, isSingleton: isSingleton);
+  static void _printLog(String message, {String? name}) {
+    printLog(
+      message,
+      name: name ?? '$Dependencies',
+    );
   }
-
-  /// Remover um objeto [O], e disposar o mesmo se for disposavel
-  void remove<O>() => Dependencies.remove<O>();
-
-  /// Remover todos os objetos, e disposar os mesmos se for
-  /// disposavel na lista dependências
-  Future<void> removeAll() => Dependencies.removeAll();
-
-  /// Disposar uma instância apenas se o [Object] não for singleton
-  void dispose<O>() => Dependencies.dispose<O>();
-
-  /// Verifica se um objeto [O] existe nas dependências
-  bool contains<O>() => Dependencies.contains<O>();
 }
