@@ -29,7 +29,7 @@ abstract class Dependencies<O> {
   }
 
   /// Obter a instância de um objeto passando o tipo Genérico [O]
-  static O get<O>() {
+  static O get<O>({Closure<O>? putAbsent, bool? isSingleton}) {
     assert(O != dynamic,
         'Insira o tipo da dependência ou objeto no parâmentro genérico O');
 
@@ -45,6 +45,13 @@ abstract class Dependencies<O> {
       } else {
         return _dependency.instance = _dependency.closure.call();
       }
+    } else if (putAbsent is Closure<O>) {
+      _dependency = Dependency<O>(putAbsent,
+          isLazy: false, isSingleton: isSingleton ?? true);
+
+      _dependencies.add(_dependency);
+
+      return _dependency.instance = _dependency.closure.call();
     } else {
       throw DependencyManagerError(
           'Objeto $O não encontrado na lista de dependências');
@@ -60,11 +67,9 @@ abstract class Dependencies<O> {
       _dependency =
           Dependency<O>(closure, isLazy: false, isSingleton: isSingleton);
 
-      _dependency.instance = _dependency.closure.call();
-
       _dependencies.add(_dependency);
 
-      return _dependency.instance;
+      return _dependency.instance = _dependency.closure.call();
     } else {
       _printLog('Já existe uma instância desse objeto $O nas dependências');
 

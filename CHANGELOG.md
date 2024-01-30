@@ -17,3 +17,6 @@
 * Restruturação do package para que seja possível instalar em projetos no dart ou flutter
 * Implementação do objeto [Disposeble]
 * Remoção do objeto [DependencyState]
+
+## 1.0.6
+* Implementação da propriedade 'putAbsent' dentro do método [Dependencies.get]

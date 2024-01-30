@@ -10,5 +10,11 @@
             "request": "launch",
             "program": "example/main.dart"
         },
+        {
+            "name": "Update git repository",
+            "type": "PowerShell",
+            "request": "launch",
+            "script": "${workspaceFolder}\\update_git_repository.ps1",
+        },
     ]
 }

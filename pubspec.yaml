@@ -1,6 +1,6 @@
 name: dependency_manager
 description: Package desenvolvido para prover funções para o controle e gerenciamento de instâncias de dependências em app.
-version: 1.0.5
+version: 1.0.6
 homepage: https://github.com/Suebersson/dependency_manager.git
 repository: https://github.com/Suebersson/dependency_manager
 
